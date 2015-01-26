@@ -2,6 +2,8 @@ package mcp.mobius.betterbarrels;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import mcp.mobius.betterbarrels.bspace.BSpaceStorageHandler;
+import mcp.mobius.betterbarrels.common.blocks.TileEntityBarrel;
 
 import java.util.Arrays;
 import java.util.WeakHashMap;

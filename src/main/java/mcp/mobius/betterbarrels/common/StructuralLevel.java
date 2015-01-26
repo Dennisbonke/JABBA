@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mcp.mobius.betterbarrels.BetterBarrels;
 import mcp.mobius.betterbarrels.Utils;
+import mcp.mobius.betterbarrels.client.StructuralLevelClientData;
 import net.minecraft.util.MathHelper;
 
 /**

@@ -1,6 +1,8 @@
 package mcp.mobius.betterbarrels;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import mcp.mobius.betterbarrels.common.StructuralLevel;
+import mcp.mobius.betterbarrels.common.items.upgrades.UpgradeCore;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
