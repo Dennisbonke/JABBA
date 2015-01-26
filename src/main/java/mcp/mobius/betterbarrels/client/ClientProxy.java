@@ -8,6 +8,7 @@ import mcp.mobius.betterbarrels.Utils;
 import mcp.mobius.betterbarrels.bspace.BBEventHandler;
 import mcp.mobius.betterbarrels.common.BaseProxy;
 import mcp.mobius.betterbarrels.common.StructuralLevel;
+import mcp.mobius.betterbarrels.common.blocks.TileEntityBarrel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;

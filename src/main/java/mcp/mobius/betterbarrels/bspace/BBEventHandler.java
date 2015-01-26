@@ -1,6 +1,7 @@
 package mcp.mobius.betterbarrels.bspace;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import mcp.mobius.betterbarrels.common.items.upgrades.UpgradeCore;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
