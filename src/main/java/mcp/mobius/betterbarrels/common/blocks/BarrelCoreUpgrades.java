@@ -145,7 +145,7 @@ public class BarrelCoreUpgrades {
         UpgradeCore core = (UpgradeCore)this.upgradeList.get(indexLastUpdate);
         if (this.barrel.getStorage().getItem() != null)
         {
-            int newMaxStoredItems = (this.barrel.getStorage().getMaxStacks() - 64 * core.slotsUsed) * this.barrel.getStorage().getItem().func_77976_d();
+            int newMaxStoredItems = (this.barrel.getStorage().getMaxStacks() - 64 * core.slotsUsed) * this.barrel.getStorage().getItem().getMaxStackSize();
             if (this.barrel.getStorage().getAmount() > newMaxStoredItems)
             {
                 BarrelPacketHandler.sendLocalizedChat(player, LocalizedChat.STACK_REMOVE, new Object[0]);
@@ -269,7 +269,7 @@ public class BarrelCoreUpgrades {
                         int newLevel = this.levelStructural - 1;
                         int newTotalSlots = 0;
                         for (int i = 0; i < newLevel; i++) {
-                            newTotalSlots += MathHelper.func_76128_c(Math.pow(2.0D, i));
+                            newTotalSlots += MathHelper.floor_double(Math.pow(2.0D, i));
                         }
                         if (newTotalSlots < getUsedSlots())
                         {
@@ -325,7 +325,7 @@ public class BarrelCoreUpgrades {
 
     void applyUpgrade(ItemStack stack, EntityPlayer player)
     {
-        UpgradeCore core = UpgradeCore.values()[stack.func_77960_j()];
+        UpgradeCore core = UpgradeCore.values()[stack.getItemDamage()];
         if ((core.type != UpgradeCore.Type.STORAGE) && (hasUpgrade(core)))
         {
             BarrelPacketHandler.sendLocalizedChat(player, LocalizedChat.COREUPGRADE_EXISTS, new Object[0]);
@@ -349,7 +349,7 @@ public class BarrelCoreUpgrades {
             }
             this.nStorageUpg += core.slotsUsed;
 
-            BarrelPacketHandler.INSTANCE.sendToDimension(new Message0x06FullStorage(this.barrel), this.barrel.func_145831_w().field_73011_w.field_76574_g);
+            BarrelPacketHandler.INSTANCE.sendToDimension(new Message0x06FullStorage(this.barrel), this.barrel.getWorldObj().provider.dimensionId);
         }
         if (core == UpgradeCore.REDSTONE)
         {
@@ -388,11 +388,11 @@ public class BarrelCoreUpgrades {
             this.upgradeList.add(UpgradeCore.CREATIVE);
             this.barrel.setCreative(true);
         }
-        if (!player.field_71075_bZ.field_75098_d) {
-            stack.field_77994_a -= 1;
+        if (!player.capabilities.isCreativeMode) {
+            stack.stackSize -= 1;
         }
         this.barrel.func_70296_d();
-        BarrelPacketHandler.INSTANCE.sendToDimension(new Message0x05CoreUpdate(this.barrel), this.barrel.func_145831_w().field_73011_w.field_76574_g);
+        BarrelPacketHandler.INSTANCE.sendToDimension(new Message0x05CoreUpdate(this.barrel), this.barrel.getWorldObj().provider.dimensionId);
     }
 
     void applyStructural(ItemStack stack, EntityPlayer player)
@@ -402,27 +402,27 @@ public class BarrelCoreUpgrades {
             BarrelPacketHandler.sendLocalizedChat(player, LocalizedChat.BSPACE_PREVENT, new Object[0]);
             return;
         }
-        if (stack.func_77960_j() == this.levelStructural)
+        if (stack.getItemDamage() == this.levelStructural)
         {
-            if (!player.field_71075_bZ.field_75098_d) {
-                stack.field_77994_a -= 1;
+            if (!player.capabilities.isCreativeMode) {
+                stack.stackSize -= 1;
             }
             this.levelStructural += 1;
         }
-        else if (((player instanceof EntityPlayerMP)) && (stack.func_77960_j() == this.levelStructural - 1))
+        else if (((player instanceof EntityPlayerMP)) && (stack.getItemDamage() == this.levelStructural - 1))
         {
             BarrelPacketHandler.sendLocalizedChat(player, LocalizedChat.UPGRADE_EXISTS, new Object[0]);
         }
-        else if (((player instanceof EntityPlayerMP)) && (stack.func_77960_j() < this.levelStructural))
+        else if (((player instanceof EntityPlayerMP)) && (stack.getItemDamage() < this.levelStructural))
         {
             BarrelPacketHandler.sendLocalizedChat(player, LocalizedChat.DOWNGRADE, new Object[0]);
         }
-        else if (((player instanceof EntityPlayerMP)) && (stack.func_77960_j() > this.levelStructural))
+        else if (((player instanceof EntityPlayerMP)) && (stack.getItemDamage() > this.levelStructural))
         {
-            BarrelPacketHandler.sendLocalizedChat(player, LocalizedChat.UPGRADE_REQUIRED, new Object[] { Integer.valueOf(stack.func_77960_j()) });
+            BarrelPacketHandler.sendLocalizedChat(player, LocalizedChat.UPGRADE_REQUIRED, new Object[] { Integer.valueOf(stack.getItemDamage()) });
         }
         this.barrel.func_70296_d();
-        BarrelPacketHandler.INSTANCE.sendToDimension(new Message0x04Structuralupdate(this.barrel), this.barrel.func_145831_w().field_73011_w.field_76574_g);
+        BarrelPacketHandler.INSTANCE.sendToDimension(new Message0x04Structuralupdate(this.barrel), this.barrel.getWorldObj().provider.dimensionId);
     }
 
     public void writeToNBT(NBTTagCompound NBTTag)
@@ -432,34 +432,34 @@ public class BarrelCoreUpgrades {
         for (int i = 0; i < savedUpgrades.length; i++) {
             savedUpgrades[i] = ((UpgradeCore)iterator.next()).ordinal();
         }
-        NBTTag.func_74783_a("coreUpgrades", savedUpgrades);
-        NBTTag.func_74768_a("structural", this.levelStructural);
-        NBTTag.func_74757_a("redstone", this.hasRedstone);
-        NBTTag.func_74757_a("hopper", this.hasHopper);
-        NBTTag.func_74757_a("ender", this.hasEnder);
-        NBTTag.func_74757_a("void", this.hasVoid);
-        NBTTag.func_74757_a("creative", this.hasCreative);
-        NBTTag.func_74768_a("nStorageUpg", this.nStorageUpg);
+        NBTTag.setIntArray("coreUpgrades", savedUpgrades);
+        NBTTag.setInteger("structural", this.levelStructural);
+        NBTTag.setBoolean("redstone", this.hasRedstone);
+        NBTTag.setBoolean("hopper", this.hasHopper);
+        NBTTag.setBoolean("ender", this.hasEnder);
+        NBTTag.setBoolean("void", this.hasVoid);
+        NBTTag.setBoolean("creative", this.hasCreative);
+        NBTTag.setInteger("nStorageUpg", this.nStorageUpg);
     }
 
     public void readFromNBT(NBTTagCompound NBTTag, int saveVersion)
     {
-        int[] savedUpgrades = NBTTag.func_74759_k("coreUpgrades");
+        int[] savedUpgrades = NBTTag.getIntArray("coreUpgrades");
         this.upgradeList = new ArrayList();
         for (int i = 0; i < savedUpgrades.length; i++) {
             this.upgradeList.add(UpgradeCore.values()[(savedUpgrades[i] + 0)]);
         }
-        this.levelStructural = NBTTag.func_74762_e("structural");
-        this.hasRedstone = NBTTag.func_74767_n("redstone");
-        this.hasHopper = NBTTag.func_74767_n("hopper");
-        this.hasEnder = NBTTag.func_74767_n("ender");
+        this.levelStructural = NBTTag.getInteger("structural");
+        this.hasRedstone = NBTTag.getBoolean("redstone");
+        this.hasHopper = NBTTag.getBoolean("hopper");
+        this.hasEnder = NBTTag.getBoolean("ender");
         if (saveVersion < 5) {
-            this.nStorageUpg = NBTTag.func_74771_c("nStorageUpg");
+            this.nStorageUpg = NBTTag.getByte("nStorageUpg");
         } else {
-            this.nStorageUpg = NBTTag.func_74762_e("nStorageUpg");
+            this.nStorageUpg = NBTTag.getInteger("nStorageUpg");
         }
-        this.barrel.setVoid(NBTTag.func_74767_n("void"));
-        this.barrel.setCreative(NBTTag.func_74767_n("creative"));
+        this.barrel.setVoid(NBTTag.getBoolean("void"));
+        this.barrel.setCreative(NBTTag.getBoolean("creative"));
     }
 
 }

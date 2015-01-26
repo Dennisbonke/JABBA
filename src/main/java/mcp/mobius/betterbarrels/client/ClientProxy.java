@@ -6,6 +6,8 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import mcp.mobius.betterbarrels.BetterBarrels;
 import mcp.mobius.betterbarrels.Utils;
 import mcp.mobius.betterbarrels.bspace.BBEventHandler;
+import mcp.mobius.betterbarrels.client.render.BlockBarrelRenderer;
+import mcp.mobius.betterbarrels.client.render.TileEntityBarrelRenderer;
 import mcp.mobius.betterbarrels.common.BaseProxy;
 import mcp.mobius.betterbarrels.common.StructuralLevel;
 import mcp.mobius.betterbarrels.common.blocks.TileEntityBarrel;
@@ -60,24 +62,20 @@ public class ClientProxy extends BaseProxy {
 
     public void postInit()
     {
-        ((IReloadableResourceManager) Minecraft.func_71410_x().func_110442_L()).func_110542_a(new IResourceManagerReloadListener()
-        {
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(new IResourceManagerReloadListener() {
             private boolean ranOnce = false;
 
-            public void func_110549_a(IResourceManager resourcemanager)
-            {
-                if (!this.ranOnce)
-                {
+            public void onResourceManagerReload(IResourceManager resourcemanager) {
+                if (!this.ranOnce) {
                     this.ranOnce = true;
                     return;
                 }
                 StructuralLevelClientData.loadBaseTextureData();
                 if (StructuralLevel.LEVELS != null) {
                     for (StructuralLevel level : StructuralLevel.LEVELS) {
-                        if (level.levelNum != 0)
-                        {
+                        if (level.levelNum != 0) {
                             level.clientData.generateIcons();
-                            StringTranslate.inject(new ByteArrayInputStream(("item.upgrade.structural." + String.valueOf(level.levelNum) + ".name=" + StatCollector.func_74838_a("item.upgrade.structural") + " " + Utils.romanNumeral(level.levelNum) + " (" + level.clientData.getMaterialName() + ")").getBytes()));
+                            StringTranslate.inject(new ByteArrayInputStream(("item.upgrade.structural." + String.valueOf(level.levelNum) + ".name=" + StatCollector.translateToLocal("item.upgrade.structural") + " " + Utils.romanNumeral(level.levelNum) + " (" + level.clientData.getMaterialName() + ")").getBytes()));
                         }
                     }
                 }

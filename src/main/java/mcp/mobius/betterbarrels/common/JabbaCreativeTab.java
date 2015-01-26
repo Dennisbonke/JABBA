@@ -17,14 +17,14 @@ public class JabbaCreativeTab extends CreativeTabs {
         super("jabba");
     }
 
-    public ItemStack func_151244_d()
+    public ItemStack getIconItemStack()
     {
         return new ItemStack(BetterBarrels.blockBarrel);
     }
 
-    public Item func_78016_d()
+    public Item getTabIconItem()
     {
-        return Item.func_150898_a(BetterBarrels.blockBarrel);
+        return Item.getItemFromBlock(BetterBarrels.blockBarrel);
     }
 
 }

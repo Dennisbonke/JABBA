@@ -45,34 +45,34 @@ public class BlockBarrel extends BlockContainer {
 
     public BlockBarrel()
     {
-        super(new Material(MapColor.field_151663_o) {});
-        func_149711_c(2.0F);
-        func_149752_b(5.0F);
+        super(new Material(MapColor.woodColor) {});
+        setHardness(2.0F);
+        setResistance(5.0F);
         setHarvestLevel("axe", 1);
-        func_149663_c("blockbarrel");
-        func_149647_a(JabbaCreativeTab.tab);
+        setBlockName("blockbarrel");
+        setCreativeTab(JabbaCreativeTab.tab);
     }
 
-    public TileEntity func_149915_a(World world, int i)
+    public TileEntity createNewTileEntity(World world, int i)
     {
         return new TileEntityBarrel();
     }
 
-    public void func_149651_a(IIconRegister iconRegister)
+    public void registerBlockIcons(IIconRegister iconRegister)
     {
-        text_sidehopper = iconRegister.func_94245_a("JABBA:facade_hopper");
-        text_siders = iconRegister.func_94245_a("JABBA:facade_redstone");
-        text_lock = iconRegister.func_94245_a("JABBA:overlay_locked");
-        text_linked = iconRegister.func_94245_a("JABBA:overlay_linked");
-        text_locklinked = iconRegister.func_94245_a("JABBA:overlay_lockedlinked");
+        text_sidehopper = iconRegister.registerIcon("JABBA:facade_hopper");
+        text_siders = iconRegister.registerIcon("JABBA:facade_redstone");
+        text_lock = iconRegister.registerIcon("JABBA:overlay_locked");
+        text_linked = iconRegister.registerIcon("JABBA:overlay_linked");
+        text_locklinked = iconRegister.registerIcon("JABBA:overlay_lockedlinked");
         for (int i = 0; i < StructuralLevel.LEVELS.length; i++) {
             StructuralLevel.LEVELS[i].clientData.registerBlockIcons(iconRegister, i);
         }
     }
 
-    public void func_149689_a(World world, int x, int y, int z, EntityLivingBase entity, ItemStack par6ItemStack)
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack par6ItemStack)
     {
-        TileEntityBarrel barrelEntity = (TileEntityBarrel)world.func_147438_o(x, y, z);
+        TileEntityBarrel barrelEntity = (TileEntityBarrel)world.getTileEntity(x, y, z);
         if (barrelEntity != null)
         {
             barrelEntity.orientation = Utils.getDirectionFacingEntity(entity, BetterBarrels.allowVerticalPlacement);

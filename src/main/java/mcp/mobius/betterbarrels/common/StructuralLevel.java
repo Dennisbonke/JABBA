@@ -28,7 +28,7 @@ public class StructuralLevel {
         {
             this.material = new Utils.Material(materialin);
             for (int i = 0; i < level; i++) {
-                this.maxCoreSlots += MathHelper.func_76128_c(Math.pow(2.0D, i));
+                this.maxCoreSlots += MathHelper.floor_double(Math.pow(2.0D, i));
             }
             BetterBarrels.debug("03 - Created structural entry for [" + (this.material.isOreDict() ? this.material.name : new StringBuilder().append(this.material.modDomain).append(":").append(this.material.name).append(":").append(this.material.meta).toString()) + "] with " + this.maxCoreSlots + " slots.");
         }

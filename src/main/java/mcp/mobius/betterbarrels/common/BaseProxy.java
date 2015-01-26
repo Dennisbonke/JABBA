@@ -22,7 +22,7 @@ public class BaseProxy {
         if ((player instanceof EntityPlayerMP))
         {
             EntityPlayerMP playerMP = (EntityPlayerMP)player;
-            playerMP.func_71120_a(playerMP.field_71069_bz);
+            playerMP.sendContainerToPlayer(playerMP.inventoryContainer);
         }
     }
 
